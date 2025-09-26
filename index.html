@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rapportino di Lavoro AISI S.r.l. (Completo e Responsive)</title>
+    <title>Rapportino di Lavoro AISI S.r.l. (Versione Definitiva)</title>
     <style>
         /* Variabili Globali */
         :root {
@@ -43,10 +43,6 @@
             font-size: 1.8em;
             margin: 0;
         }
-        .logo-section p {
-            font-size: 0.8em;
-            margin: 0;
-        }
         .doc-details {
             text-align: left;
             margin-top: 10px;
@@ -56,19 +52,15 @@
             margin: 0 0 5px 0;
             color: var(--primary-color);
         }
+        /* Stile ripristinato per il campo numero (ora manuale) */
         .doc-number input {
             border: none;
             border-bottom: 1px solid #343a40;
             text-align: center;
             font-weight: bold;
-            width: 70px;
+            width: 70px; /* Larghezza originale ripristinata */
             padding: 2px 5px;
-        }
-        .info-field {
-            width: 100%;
-            padding-right: 0;
-            margin-bottom: 15px;
-            box-sizing: border-box;
+            color: var(--text-color); /* Colore nero/standard ripristinato */
         }
         .section-title {
             font-size: 1em;
@@ -120,59 +112,39 @@
             font-size: 0.9em;
         }
         table th:nth-child(1) { width: 50%; }
-        table th:nth-child(2), table th:nth-child(3) { width: 15%; }
-        table th:nth-child(4) { width: 20%; }
         .total-row td {
             background-color: #f1f1f1;
             font-weight: bold;
         }
 
-        /* FIRMA TRADIZIONALE */
-        .signature-block {
-            margin-top: 30px;
-            padding-top: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .signature-area {
-            width: 90%;
-            margin: 10px 0;
-            text-align: center;
-        }
-        .signature-line {
-            border-bottom: 1px dashed #666;
-            margin: 10px 0 5px 0;
-            height: 30px;
-        }
-        .signature-area p {
-            font-size: 0.9em;
-            color: #555;
-            margin: 0;
-        }
-
-        /* STILI FIRMA DIGITALE */
+        /* STILI FIRMA DIGITALE (DOPPIA) */
         .digital-signature-block {
-            margin-top: 30px;
+            margin-top: 40px;
             padding-top: 20px;
             border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column; 
+            justify-content: space-between;
         }
         .signature-section {
             margin-bottom: 25px;
             border: 1px solid #ccc;
             padding: 10px;
             border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .signature-section h3 {
-            font-size: 1em;
+            font-size: 1.1em;
             color: var(--primary-color);
             margin-top: 0;
+            text-align: center;
         }
         canvas {
             border: 1px solid var(--border-color);
             display: block;
             width: 100%;
-            touch-action: none; /* ESSENZIALE per la firma su mobile */
+            touch-action: none; 
         }
         .signature-buttons {
             display: flex;
@@ -199,21 +171,12 @@
             text-align: center;
             color: #6c757d;
         }
-        .footer p { margin: 5px 0; }
-        .footer span { display: block; }
         
         /* Media Query per Desktop */
         @media (min-width: 600px) {
-            .header { flex-direction: row; align-items: center; }
-            .doc-details { text-align: right; margin-top: 0; }
-            .info-field:first-child { width: 100%; padding-right: 0; }
-            .info-field:nth-child(2) { width: 70%; padding-right: 20px; }
-            .info-field:nth-child(3) { width: 30%; padding-right: 0; }
-            .signature-block { flex-direction: row; }
-            .signature-area { width: 45%; margin: 0; }
-            .digital-signature-block { display: flex; justify-content: space-between; }
+            .digital-signature-block { flex-direction: row; }
             .signature-section { width: 48%; }
-            .footer span { display: inline-block; margin: 0 10px; }
+            .doc-details { text-align: right; margin-top: 0; }
         }
     </style>
 </head>
@@ -227,7 +190,7 @@
         </div>
         <div class="doc-details">
             <h2>Rapportino di Lavoro</h2>
-            <div class="doc-number">N°: <input type="text" name="rapportino_n" value="" size="8"></div>
+            <div class="doc-number">N°: <input type="text" id="rapportino_n_input" name="rapportino_n" value="" size="8"></div>
         </div>
     </div>
 
@@ -290,24 +253,13 @@
     </div>
     <datalist id="lista_mezzi"></datalist>
 
-    <div class="signature-block">
-        <div class="signature-area">
-            <p>Per AISI S.r.l. (Firma cartacea/Timbro)</p>
-            <div class="signature-line"></div>
-        </div>
-        <div class="signature-area">
-            <p>Per il Cliente (Firma cartacea/Timbro)</p>
-            <div class="signature-line"></div>
-        </div>
-    </div>
-    
     <div class="digital-signature-block">
         
         <div class="signature-section">
-            <h3>Firma Digitale Cliente</h3>
+            <h3>Firma Digitale Cliente (Per Accettazione)</h3>
             <canvas id="clientSignatureCanvas" width="300" height="150"></canvas>
             <div class="signature-buttons">
-                <button type="button" class="clear-button" onclick="clearCanvas('clientSignatureCanvas')">Annulla</button>
+                <button type="button" class="clear-button" onclick="clearCanvas('clientSignatureCanvas')">Annulla / Ridisegna</button>
                 <button type="button" class="save-button" onclick="saveSignature('clientSignatureCanvas', 'clientSignatureData')">Salva Firma</button>
             </div>
             <input type="hidden" id="clientSignatureData" name="client_signature_data">
@@ -317,7 +269,7 @@
             <h3>Firma Digitale Operatore AISI S.r.l.</h3>
             <canvas id="aisiSignatureCanvas" width="300" height="150"></canvas>
             <div class="signature-buttons">
-                <button type="button" class="clear-button" onclick="clearCanvas('aisiSignatureCanvas')">Annulla</button>
+                <button type="button" class="clear-button" onclick="clearCanvas('aisiSignatureCanvas')">Annulla / Ridisegna</button>
                 <button type="button" class="save-button" onclick="saveSignature('aisiSignatureCanvas', 'aisiSignatureData')">Salva Firma</button>
             </div>
             <input type="hidden" id="aisiSignatureData" name="aisi_signature_data">
@@ -332,10 +284,8 @@
 </div>
 
 <script>
-    // ⚠️ URL CLIENTE: Assicurati che questo sia il link RAW corretto
+    // ⚠️ URL JSON
     const GITHUB_CLIENTI_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/clienti.json';
-    
-    // ⚠️ URL MEZZI: Assicurati che questo sia il link RAW corretto
     const GITHUB_MEZZI_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/mezzi.json'; 
 
     // --- LOGICA FIRMA DIGITALE (Canvas) ---
@@ -352,7 +302,7 @@
         ctx.lineCap = 'round';
         ctx.strokeStyle = '#000000'; 
         ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height); // Riempi lo sfondo
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         function getCoords(e) {
             const rect = canvas.getBoundingClientRect();
@@ -413,11 +363,13 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        // Il campo numero di rapporto è ora manuale (nessuna funzione qui)
+        
         // Inizializza entrambi i canvas di firma
         initSignatureCanvas('clientSignatureCanvas');
         initSignatureCanvas('aisiSignatureCanvas');
 
-        // --- LOGICA CARICAMENTO JSON ---
+        // --- LOGICA CARICAMENTO DATALIST JSON ---
 
         // 1. CARICAMENTO ANAGRAFICA CLIENTI
         const dataListClienti = document.getElementById('lista_clienti');
