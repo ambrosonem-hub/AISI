@@ -29,23 +29,44 @@
             padding: 15px;
         }
 
-        /* INTESTAZIONE e CAMPI GENERALI */
+        /* INTESTAZIONE e CAMPI GENERALI - LOGO A DESTRA */
         .header {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: flex-start;
             border-bottom: 3px solid var(--primary-color);
             padding-bottom: 10px;
             margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
+            min-width: 180px;
+        }
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+            flex: 1;
+            min-width: 250px;
         }
         .logo-section h1 {
             color: var(--primary-color);
             font-size: 1.8em;
             margin: 0;
         }
+        .company-logo {
+            max-width: 150px; /* Dimensione massima del logo */
+            height: auto;
+            margin-bottom: 10px;
+        }
         .doc-details {
-            text-align: left;
-            margin-top: 10px;
+            text-align: right;
+            margin-top: 0;
         }
         .doc-details h2 {
             font-size: 1.3em;
@@ -126,11 +147,11 @@
             min-width: 50px; 
         }
         /* REGOLA PER IL RESPONSIVE DELLA TABELLA A 5 COLONNE */
-        table th:nth-child(1) { width: 30%; } /* Mezzo: 30% */
-        table th:nth-child(2) { width: 15%; } /* Targa: 15% */
+        table th:nth-child(1) { width: 30%; } 
+        table th:nth-child(2) { width: 15%; } 
         table th:nth-child(3),
         table th:nth-child(4),
-        table th:nth-child(5) { width: 18.33%; } /* Ore: 18.33% ciascuno */
+        table th:nth-child(5) { width: 18.33%; } 
         
         .total-row td {
             background-color: #f1f1f1;
@@ -164,7 +185,7 @@
             border: 1px solid var(--border-color);
             display: block;
             width: 100%;
-            height: 150px; /* Altezza fissa per mobile/visualizzazione */
+            height: 150px;
             touch-action: none; 
         }
         .signature-buttons {
@@ -197,7 +218,6 @@
         @media (min-width: 600px) {
             .digital-signature-block { flex-direction: row; }
             .signature-section { width: 48%; }
-            .doc-details { text-align: right; margin-top: 0; }
 
             /* Layout Orizzontale Campi Info */
             .info-field:nth-child(1) {
@@ -209,7 +229,7 @@
             }
         }
 
-        /* 🚨 MEDIA QUERY PER LA STAMPA: Rendere tutto compatto e stampare l'immagine firma 🚨 */
+        /* 🚨 MEDIA QUERY PER LA STAMPA 🚨 */
         @media print {
             body {
                 background-color: #fff;
@@ -232,7 +252,13 @@
                 display: none;
             }
             
-            /* 1. NASCONDI IL CANVAS E I BOTTONI */
+            /* Riduci leggermente il logo in stampa */
+            .company-logo {
+                max-width: 120px !important; 
+                height: auto !important;
+            }
+
+            /* 1. NASCONDI IL CANVAS */
             canvas {
                 display: none !important;
             }
@@ -240,7 +266,7 @@
             /* 2. MOSTRA L'IMMAGINE DI STAMPA DELLA FIRMA (IMG) */
             img[id$="SignatureImg"] {
                 display: block !important;
-                height: 70px !important; /* Forza l'altezza ridotta per la stampa */
+                height: 70px !important;
                 width: 100% !important;
                 border: 1px solid #000 !important;
                 -webkit-print-color-adjust: exact; 
@@ -255,7 +281,6 @@
                 border-bottom: 1px solid var(--text-color); 
                 padding: 0;
                 margin-top: 5px;
-                /* Rimuove frecce e freccette dai campi select e input[type="text"] per la stampa */
                 -webkit-appearance: none;
                 -moz-appearance: none;
                 appearance: none;
@@ -285,13 +310,18 @@
 
 <div class="container">
     <div class="header">
-        <div class="logo-section">
-            <h1>AISI S.r.l.</h1>
-            <p>www.aisiautogru.it</p>
+        <div class="header-left">
+            <div class="logo-section">
+                <h1>AISI S.r.l.</h1>
+                <p>www.aisiautogru.it</p>
+            </div>
         </div>
-        <div class="doc-details">
-            <h2>Rapportino di Lavoro</h2>
-            <div class="doc-number">N°: <input type="text" id="rapportino_n_input" name="rapportino_n" value="" size="8"></div>
+        <div class="header-right">
+            <img src="https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/logo.jpg" alt="Logo Azienda" class="company-logo">
+            <div class="doc-details">
+                <h2>Rapportino di Lavoro</h2>
+                <div class="doc-number">N°: <input type="text" id="rapportino_n_input" name="rapportino_n" value="" size="8"></div>
+            </div>
         </div>
     </div>
 
@@ -465,7 +495,7 @@
         initSignatureCanvas('aisiSignatureCanvas');
     });
 
-    // Funzione di pulizia (Reset) - AGGIORNATA
+    // Funzione di pulizia (Reset)
     window.clearCanvas = function(canvasId, imgId) {
         const canvas = document.getElementById(canvasId);
         const img = document.getElementById(imgId);
@@ -486,7 +516,7 @@
         }
     }
 
-    // Funzione di salvataggio (Converte la firma in Base64 e la mette nell'IMG) - AGGIORNATA
+    // Funzione di salvataggio (Converte la firma in Base64 e la mette nell'IMG)
     window.saveSignature = function(canvasId, inputId, imgId) {
         const canvas = document.getElementById(canvasId);
         const input = document.getElementById(inputId);
@@ -543,9 +573,10 @@
         totaleFinaleInput.value = totalTotaleOre.toFixed(1) + " H";
     }
 
-    // --- INIZIALIZZAZIONE ---
+    // --- INIZIALIZZAZIONE DATI JSON ---
 
     document.addEventListener('DOMContentLoaded', () => {
+        // Inizializza firme e calcoli
         initSignatureCanvas('clientSignatureCanvas');
         initSignatureCanvas('aisiSignatureCanvas');
 
@@ -553,7 +584,6 @@
         numericalInputs.forEach(input => {
             input.addEventListener('input', calculateTotals);
         });
-
         calculateTotals();
 
 
@@ -578,7 +608,7 @@
                 dataListClienti.innerHTML = '<option value="ERRORE: Lista clienti non disponibile.">';
             });
 
-        // 2. CARICAMENTO ANAGRAFICA MEZZI (Ora popola i <select>)
+        // 2. CARICAMENTO ANAGRAFICA MEZZI 
         const mezzoSelects = document.querySelectorAll('select[name^="mezzo_"]');
         
         fetch(GITHUB_MEZZI_URL)
@@ -599,7 +629,7 @@
                     });
                     console.log(`Mezzi caricati: ${mezzi.length}`);
                 } else {
-                    console.error('ERRORE STRUTTURA JSON MEZZI:', 'Il file mezzi.json non è nel formato atteso (array di oggetti con campi "nome" e "targa").');
+                    console.error('ERRORE STRUTTURA JSON MEZZI:', 'Il file mezzi.json è stato letto ma non è nel formato atteso (array di oggetti con campi "nome" e "targa").');
                 }
             })
             .catch(error => {
