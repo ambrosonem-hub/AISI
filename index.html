@@ -526,7 +526,8 @@
             const dataURL = canvas.toDataURL('image/png');
             
             // Controllo indicativo se il canvas è vuoto
-            if (dataURL.length < 10000) { 
+            // Valore impostato a 2000 per maggiore sensibilità
+            if (dataURL.length < 2000) { 
                 alert('Attenzione: la firma non è stata rilevata. Per favore, disegna la firma e riprova a salvare.');
                 return;
             }
