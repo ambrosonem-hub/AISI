@@ -92,7 +92,7 @@
             min-width: 100%;
         }
 
-        /* TABELLA RESPONSIVE (5 COLONNE - OTTIMIZZATA PER MOBILE) */
+        /* TABELLA RESPONSIVE (5 COLONNE) */
         .table-container {
             overflow-x: auto; 
             margin-top: 20px;
@@ -209,7 +209,7 @@
             }
         }
 
-        /* 🚨 MEDIA QUERY PER LA STAMPA: Rendere tutto compatto 🚨 */
+        /* 🚨 MEDIA QUERY PER LA STAMPA: Rendere tutto compatto e stampare l'immagine firma 🚨 */
         @media print {
             body {
                 background-color: #fff;
@@ -226,15 +226,22 @@
             
             /* Nascondi elementi non necessari in stampa */
             .signature-buttons {
-                display: none;
+                display: none !important;
             }
             .footer p:nth-child(2) {
                 display: none;
             }
             
-            /* Riduci l'altezza del canvas per le firme (dimensione fissa) */
+            /* 1. NASCONDI IL CANVAS E I BOTTONI */
             canvas {
-                height: 70px !important; /* Molto più piccolo in stampa */
+                display: none !important;
+            }
+
+            /* 2. MOSTRA L'IMMAGINE DI STAMPA DELLA FIRMA (IMG) */
+            img[id$="SignatureImg"] {
+                display: block !important;
+                height: 70px !important; /* Forza l'altezza ridotta per la stampa */
+                width: 100% !important;
                 border: 1px solid #000 !important;
                 -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact;
@@ -314,7 +321,8 @@
             <thead>
                 <tr>
                     <th>MEZZO</th>
-                    <th>TARGA</th> <th>ORE VIAGGIO</th>
+                    <th>TARGA</th> 
+                    <th>ORE VIAGGIO</th>
                     <th>ORE LAVORO</th>
                     <th>TOT. ORE<br> LAVORO + VIAGGIO</th>
                 </tr>
@@ -362,26 +370,29 @@
             </tbody>
         </table>
     </div>
+
     <div class="digital-signature-block">
         
         <div class="signature-section">
             <h3>Firma Digitale Cliente (Per Accettazione)</h3>
             <canvas id="clientSignatureCanvas" width="300"></canvas> 
             <div class="signature-buttons">
-                <button type="button" class="clear-button" onclick="clearCanvas('clientSignatureCanvas')">Annulla / Ridisegna</button>
-                <button type="button" class="save-button" onclick="saveSignature('clientSignatureCanvas', 'clientSignatureData')">Salva Firma</button>
+                <button type="button" class="clear-button" onclick="clearCanvas('clientSignatureCanvas', 'clientSignatureImg')">Annulla / Ridisegna</button>
+                <button type="button" class="save-button" onclick="saveSignature('clientSignatureCanvas', 'clientSignatureData', 'clientSignatureImg')">Salva Firma</button>
             </div>
             <input type="hidden" id="clientSignatureData" name="client_signature_data">
+            <img id="clientSignatureImg" style="display: none; width: 100%; height: 70px; border: 1px solid #000; margin-top: 10px;" alt="Firma del Cliente">
         </div>
         
         <div class="signature-section">
             <h3>Firma Digitale Operatore AISI S.r.l.</h3>
             <canvas id="aisiSignatureCanvas" width="300"></canvas>
             <div class="signature-buttons">
-                <button type="button" class="clear-button" onclick="clearCanvas('aisiSignatureCanvas')">Annulla / Ridisegna</button>
-                <button type="button" class="save-button" onclick="saveSignature('aisiSignatureCanvas', 'aisiSignatureData')">Salva Firma</button>
+                <button type="button" class="clear-button" onclick="clearCanvas('aisiSignatureCanvas', 'aisiSignatureImg')">Annulla / Ridisegna</button>
+                <button type="button" class="save-button" onclick="saveSignature('aisiSignatureCanvas', 'aisiSignatureData', 'aisiSignatureImg')">Salva Firma</button>
             </div>
             <input type="hidden" id="aisiSignatureData" name="aisi_signature_data">
+            <img id="aisiSignatureImg" style="display: none; width: 100%; height: 70px; border: 1px solid #000; margin-top: 10px;" alt="Firma Operatore AISI">
         </div>
         
     </div>
@@ -393,7 +404,7 @@
 </div>
 
 <script>
-    // ⚠️ URL JSON
+    // ⚠️ URL JSON (Verifica attentamente questi URL)
     const GITHUB_CLIENTI_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/clienti.json';
     const GITHUB_MEZZI_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/mezzi.json';
 
@@ -454,38 +465,57 @@
         initSignatureCanvas('aisiSignatureCanvas');
     });
 
-    window.clearCanvas = function(canvasId) {
+    // Funzione di pulizia (Reset) - AGGIORNATA
+    window.clearCanvas = function(canvasId, imgId) {
         const canvas = document.getElementById(canvasId);
+        const img = document.getElementById(imgId);
         if (canvas) {
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "white";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.getElementById(canvasId.replace('Canvas', 'Data')).value = '';
+            
+            // Logica reset per l'immagine: nasconde l'immagine e mostra il canvas
+            if (img) {
+                img.src = '';
+                img.style.display = 'none';
+            }
+            canvas.style.display = 'block';
             alert('Firma cancellata. Puoi ridisegnare ora.');
         }
     }
 
-    window.saveSignature = function(canvasId, inputId) {
+    // Funzione di salvataggio (Converte la firma in Base64 e la mette nell'IMG) - AGGIORNATA
+    window.saveSignature = function(canvasId, inputId, imgId) {
         const canvas = document.getElementById(canvasId);
         const input = document.getElementById(inputId);
-        if (canvas && input) {
+        const img = document.getElementById(imgId);
+
+        if (canvas && input && img) {
             const dataURL = canvas.toDataURL('image/png');
+            
+            // Controllo indicativo se il canvas è vuoto
             if (dataURL.length < 10000) { 
                 alert('Attenzione: la firma non è stata rilevata. Per favore, disegna la firma e riprova a salvare.');
                 return;
             }
+
             input.value = dataURL;
+            img.src = dataURL; // IMPORTO LA FIRMA NELL'ELEMENTO IMMAGINE
+            
+            // Nascondo il canvas e mostro l'immagine statica
+            canvas.style.display = 'none';
+            img.style.display = 'block';
+
             alert('Firma salvata correttamente! Non è più possibile modificarla senza annullarla.');
         }
     }
 
     // --- LOGICA AGGIUNTA/CALCOLO DATI MEZZI ---
     
-    // NUOVA FUNZIONE: Aggiorna il campo Targa quando il mezzo cambia
     window.updateTarga = function(selectElement, targaInputId) {
         const selectedOption = selectElement.options[selectElement.selectedIndex];
-        // Recupera la targa dall'attributo data-targa dell'opzione selezionata
         const targa = selectedOption.getAttribute('data-targa') || ''; 
         document.getElementById(targaInputId).value = targa;
     }
@@ -516,11 +546,9 @@
     // --- INIZIALIZZAZIONE ---
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Inizializza entrambi i canvas di firma
         initSignatureCanvas('clientSignatureCanvas');
         initSignatureCanvas('aisiSignatureCanvas');
 
-        // Aggancia l'evento input a tutti i campi numerici per ricalcolare i totali
         const numericalInputs = document.querySelectorAll('input[type="number"][step="0.5"]');
         numericalInputs.forEach(input => {
             input.addEventListener('input', calculateTotals);
@@ -532,7 +560,10 @@
         // 1. CARICAMENTO ANAGRAFICA CLIENTI
         const dataListClienti = document.getElementById('lista_clienti');
         fetch(GITHUB_CLIENTI_URL)
-            .then(response => response.ok ? response.json() : Promise.reject(`Clienti status: ${response.status}`))
+            .then(response => {
+                if (!response.ok) throw new Error(`Clienti: Errore HTTP ${response.status} - Controlla URL.`);
+                return response.json();
+            })
             .then(clienti => {
                 if (Array.isArray(clienti)) {
                     clienti.forEach(cliente => {
@@ -543,7 +574,7 @@
                 }
             })
             .catch(error => {
-                console.error('Errore caricamento clienti:', error);
+                console.error('ERRORE CARICAMENTO CLIENTI:', error);
                 dataListClienti.innerHTML = '<option value="ERRORE: Lista clienti non disponibile.">';
             });
 
@@ -551,30 +582,31 @@
         const mezzoSelects = document.querySelectorAll('select[name^="mezzo_"]');
         
         fetch(GITHUB_MEZZI_URL)
-            .then(response => response.ok ? response.json() : Promise.reject(`Mezzi status: ${response.status}`))
+            .then(response => {
+                if (!response.ok) throw new Error(`Mezzi: Errore HTTP ${response.status} - Controlla URL.`);
+                return response.json();
+            })
             .then(mezzi => {
-                if (Array.isArray(mezzi) && mezzi.every(m => m.nome && m.targa)) {
+                if (Array.isArray(mezzi) && mezzi.every(m => typeof m === 'object' && m !== null && 'nome' in m && 'targa' in m)) {
                     mezzoSelects.forEach(select => {
                         mezzi.forEach(mezzo => {
                             const option = document.createElement('option');
                             option.value = mezzo.nome;
-                            // Visualizza nome e targa nell'elenco
                             option.textContent = mezzo.nome + ' (' + mezzo.targa + ')'; 
-                            // Salva la targa nell'attributo data per l'autocompilazione
                             option.setAttribute('data-targa', mezzo.targa); 
                             select.appendChild(option);
                         });
                     });
                     console.log(`Mezzi caricati: ${mezzi.length}`);
                 } else {
-                    console.warn('Il file mezzi.json non è nel formato atteso (array di oggetti con "nome" e "targa").');
+                    console.error('ERRORE STRUTTURA JSON MEZZI:', 'Il file mezzi.json non è nel formato atteso (array di oggetti con campi "nome" e "targa").');
                 }
             })
             .catch(error => {
-                console.error('Errore caricamento mezzi:', error);
+                console.error('ERRORE CARICAMENTO MEZZI:', error);
                 mezzoSelects.forEach(select => {
                     const option = document.createElement('option');
-                    option.textContent = 'ERRORE: Lista mezzi non disponibile.';
+                    option.textContent = 'ERRORE: Lista mezzi non disponibile. Controlla la console per i dettagli.';
                     select.appendChild(option);
                 });
             });
