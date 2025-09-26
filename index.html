@@ -52,15 +52,14 @@
             margin: 0 0 5px 0;
             color: var(--primary-color);
         }
-        /* Stile ripristinato per il campo numero (ora manuale) */
         .doc-number input {
             border: none;
             border-bottom: 1px solid #343a40;
             text-align: center;
             font-weight: bold;
-            width: 70px; /* Larghezza originale ripristinata */
+            width: 70px;
             padding: 2px 5px;
-            color: var(--text-color); /* Colore nero/standard ripristinato */
+            color: var(--text-color);
         }
         .section-title {
             font-size: 1em;
@@ -69,7 +68,7 @@
             border-left: 4px solid var(--primary-color);
             font-weight: bold;
         }
-        input[type="text"], input[type="number"], input[type="date"], textarea {
+        input[type="text"], input[type="number"], input[type="date"], textarea, select {
             padding: 8px 10px;
             font-size: 1em;
             border: 1px solid var(--border-color);
@@ -77,16 +76,30 @@
             width: 100%;
             box-sizing: border-box;
         }
+        
+        /* Layout Responsivo Campi Info */
+        .info-group {
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 10px; 
+            margin-bottom: 20px;
+        }
+        .info-field {
+            flex: 1; 
+            min-width: 250px; 
+        }
+        .info-field:nth-child(1) {
+            min-width: 100%;
+        }
 
-        /* TABELLA RESPONSIVE (4 COLONNE) */
+        /* TABELLA RESPONSIVE (5 COLONNE - OTTIMIZZATA PER MOBILE) */
         .table-container {
-            overflow-x: auto;
+            overflow-x: auto; 
             margin-top: 20px;
             -webkit-overflow-scrolling: touch;
         }
         table {
             width: 100%;
-            min-width: 550px;
             border-collapse: collapse;
             font-size: 0.9em;
         }
@@ -104,14 +117,21 @@
         .table-input {
             padding: 0;
         }
-        .table-input input {
+        .table-input input, .table-input select {
             border: none;
             text-align: center;
             padding: 8px 5px;
             height: 100%;
             font-size: 0.9em;
+            min-width: 50px; 
         }
-        table th:nth-child(1) { width: 50%; }
+        /* REGOLA PER IL RESPONSIVE DELLA TABELLA A 5 COLONNE */
+        table th:nth-child(1) { width: 30%; } /* Mezzo: 30% */
+        table th:nth-child(2) { width: 15%; } /* Targa: 15% */
+        table th:nth-child(3),
+        table th:nth-child(4),
+        table th:nth-child(5) { width: 18.33%; } /* Ore: 18.33% ciascuno */
+        
         .total-row td {
             background-color: #f1f1f1;
             font-weight: bold;
@@ -144,6 +164,7 @@
             border: 1px solid var(--border-color);
             display: block;
             width: 100%;
+            height: 150px; /* Altezza fissa per mobile/visualizzazione */
             touch-action: none; 
         }
         .signature-buttons {
@@ -172,11 +193,84 @@
             color: #6c757d;
         }
         
-        /* Media Query per Desktop */
+        /* Media Query per Tablet e Desktop (Layout Orizzontale) */
         @media (min-width: 600px) {
             .digital-signature-block { flex-direction: row; }
             .signature-section { width: 48%; }
             .doc-details { text-align: right; margin-top: 0; }
+
+            /* Layout Orizzontale Campi Info */
+            .info-field:nth-child(1) {
+                flex-basis: 100%; 
+            }
+            .info-field:nth-child(2),
+            .info-field:nth-child(3) {
+                flex-basis: calc(50% - 5px); 
+            }
+        }
+
+        /* 🚨 MEDIA QUERY PER LA STAMPA: Rendere tutto compatto 🚨 */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+                margin: 0;
+                font-size: 10pt; 
+            }
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+                margin: 0;
+            }
+            
+            /* Nascondi elementi non necessari in stampa */
+            .signature-buttons {
+                display: none;
+            }
+            .footer p:nth-child(2) {
+                display: none;
+            }
+            
+            /* Riduci l'altezza del canvas per le firme (dimensione fissa) */
+            canvas {
+                height: 70px !important; /* Molto più piccolo in stampa */
+                border: 1px solid #000 !important;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+            }
+            
+            /* I campi di input e select devono sembrare testo fisso */
+            input:not([type="number"]):not([type="date"]), 
+            textarea,
+            select {
+                border: none;
+                border-bottom: 1px solid var(--text-color); 
+                padding: 0;
+                margin-top: 5px;
+                /* Rimuove frecce e freccette dai campi select e input[type="text"] per la stampa */
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+            }
+
+            input[type="number"], input[type="date"] {
+                border: none;
+            }
+            
+            /* Nascondi il background colorato della tabella in stampa */
+            th {
+                background-color: #ccc !important;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+            }
+            
+            .total-row td {
+                background-color: #ddd !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
     </style>
 </head>
@@ -195,7 +289,7 @@
     </div>
 
     <div class="info-group">
-        <div class="info-field" style="width: 100%;">
+        <div class="info-field">
             <strong>SPETT.LE Cliente:</strong>
             <input type="text" name="cliente_spettabile" list="lista_clienti" placeholder="Inizia a digitare il nome del cliente...">
             <datalist id="lista_clienti"></datalist>
@@ -220,44 +314,59 @@
             <thead>
                 <tr>
                     <th>MEZZO</th>
-                    <th>ORE VIAGGIO</th>
+                    <th>TARGA</th> <th>ORE VIAGGIO</th>
                     <th>ORE LAVORO</th>
                     <th>TOT. ORE<br> LAVORO + VIAGGIO</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><input type="text" name="mezzo_1" list="lista_mezzi" placeholder="Seleziona o digita il mezzo"></td>
+                    <td>
+                        <select name="mezzo_1" onchange="updateTarga(this, 'targa_1')">
+                            <option value="" data-targa="">Seleziona il mezzo</option>
+                        </select>
+                    </td>
+                    <td class="table-input">
+                        <input type="text" name="targa_1" id="targa_1" readonly placeholder="Auto-compilata">
+                    </td>
                     <td class="table-input"><input type="number" name="ore_viaggio_1" min="0" step="0.5"></td>
                     <td class="table-input"><input type="number" name="ore_lavoro_1" min="0" step="0.5"></td>
-                    <td class="table-input"><input type="number" name="ore_totali_1" min="0" step="0.5"></td>
+                    <td class="table-input"><input type="number" name="ore_totali_1" min="0" step="0.5" readonly></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="mezzo_2" list="lista_mezzi" placeholder="Seleziona o digita il mezzo"></td>
+                    <td>
+                        <select name="mezzo_2" onchange="updateTarga(this, 'targa_2')">
+                            <option value="" data-targa="">Seleziona il mezzo</option>
+                        </select>
+                    </td>
+                    <td class="table-input"><input type="text" name="targa_2" id="targa_2" readonly placeholder="Auto-compilata"></td>
                     <td class="table-input"><input type="number" name="ore_viaggio_2" min="0" step="0.5"></td>
                     <td class="table-input"><input type="number" name="ore_lavoro_2" min="0" step="0.5"></td>
-                    <td class="table-input"><input type="number" name="ore_totali_2" min="0" step="0.5"></td>
+                    <td class="table-input"><input type="number" name="ore_totali_2" min="0" step="0.5" readonly></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="mezzo_3" list="lista_mezzi"></td>
+                    <td>
+                        <select name="mezzo_3" onchange="updateTarga(this, 'targa_3')">
+                            <option value="" data-targa="">Seleziona il mezzo</option>
+                        </select>
+                    </td>
+                    <td class="table-input"><input type="text" name="targa_3" id="targa_3" readonly placeholder="Auto-compilata"></td>
                     <td class="table-input"><input type="number" name="ore_viaggio_3" min="0" step="0.5"></td>
                     <td class="table-input"><input type="number" name="ore_lavoro_3" min="0" step="0.5"></td>
-                    <td class="table-input"><input type="number" name="ore_totali_3" min="0" step="0.5"></td>
+                    <td class="table-input"><input type="number" name="ore_totali_3" min="0" step="0.5" readonly></td>
                 </tr>
                 <tr class="total-row">
-                    <td style="text-align: right; border: none; background-color: transparent;" colspan="3">TOTALE ORE LAVORATE:</td>
+                    <td style="text-align: right; border: none; background-color: transparent;" colspan="4">TOTALE ORE LAVORATE:</td>
                     <td class="table-input"><input type="text" name="totale_finale" readonly placeholder="Auto-calcolato"></td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <datalist id="lista_mezzi"></datalist>
-
     <div class="digital-signature-block">
         
         <div class="signature-section">
             <h3>Firma Digitale Cliente (Per Accettazione)</h3>
-            <canvas id="clientSignatureCanvas" width="300" height="150"></canvas>
+            <canvas id="clientSignatureCanvas" width="300"></canvas> 
             <div class="signature-buttons">
                 <button type="button" class="clear-button" onclick="clearCanvas('clientSignatureCanvas')">Annulla / Ridisegna</button>
                 <button type="button" class="save-button" onclick="saveSignature('clientSignatureCanvas', 'clientSignatureData')">Salva Firma</button>
@@ -267,7 +376,7 @@
         
         <div class="signature-section">
             <h3>Firma Digitale Operatore AISI S.r.l.</h3>
-            <canvas id="aisiSignatureCanvas" width="300" height="150"></canvas>
+            <canvas id="aisiSignatureCanvas" width="300"></canvas>
             <div class="signature-buttons">
                 <button type="button" class="clear-button" onclick="clearCanvas('aisiSignatureCanvas')">Annulla / Ridisegna</button>
                 <button type="button" class="save-button" onclick="saveSignature('aisiSignatureCanvas', 'aisiSignatureData')">Salva Firma</button>
@@ -286,7 +395,7 @@
 <script>
     // ⚠️ URL JSON
     const GITHUB_CLIENTI_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/clienti.json';
-    const GITHUB_MEZZI_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/mezzi.json'; 
+    const GITHUB_MEZZI_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/mezzi.json';
 
     // --- LOGICA FIRMA DIGITALE (Canvas) ---
 
@@ -294,29 +403,28 @@
         const canvas = document.getElementById(canvasId);
         if (!canvas) return;
 
+        const styleHeight = parseInt(window.getComputedStyle(canvas).height);
+        canvas.height = styleHeight > 0 ? styleHeight : 150; 
+        canvas.width = canvas.offsetWidth; 
+        
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
-
-        // Impostazioni disegno
         ctx.lineWidth = 2;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = '#000000'; 
+        ctx.strokeStyle = '#004080'; 
         ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, canvas.width, canvas.height); 
 
         function getCoords(e) {
             const rect = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
-            };
+            return { x: clientX - rect.left, y: clientY - rect.top };
         }
 
         ['mousedown', 'touchstart'].forEach(eventName => {
             canvas.addEventListener(eventName, (e) => {
-                e.preventDefault(); 
+                e.preventDefault();
                 isDrawing = true;
                 const { x, y } = getCoords(e);
                 ctx.beginPath();
@@ -327,7 +435,7 @@
         ['mousemove', 'touchmove'].forEach(eventName => {
             canvas.addEventListener(eventName, (e) => {
                 if (!isDrawing) return;
-                e.preventDefault(); 
+                e.preventDefault();
                 const { x, y } = getCoords(e);
                 ctx.lineTo(x, y);
                 ctx.stroke();
@@ -341,6 +449,11 @@
         });
     }
 
+    window.addEventListener('resize', () => {
+        initSignatureCanvas('clientSignatureCanvas');
+        initSignatureCanvas('aisiSignatureCanvas');
+    });
+
     window.clearCanvas = function(canvasId) {
         const canvas = document.getElementById(canvasId);
         if (canvas) {
@@ -349,6 +462,7 @@
             ctx.fillStyle = "white";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.getElementById(canvasId.replace('Canvas', 'Data')).value = '';
+            alert('Firma cancellata. Puoi ridisegnare ora.');
         }
     }
 
@@ -357,19 +471,63 @@
         const input = document.getElementById(inputId);
         if (canvas && input) {
             const dataURL = canvas.toDataURL('image/png');
+            if (dataURL.length < 10000) { 
+                alert('Attenzione: la firma non è stata rilevata. Per favore, disegna la firma e riprova a salvare.');
+                return;
+            }
             input.value = dataURL;
-            alert('Firma salvata correttamente!');
+            alert('Firma salvata correttamente! Non è più possibile modificarla senza annullarla.');
         }
     }
 
+    // --- LOGICA AGGIUNTA/CALCOLO DATI MEZZI ---
+    
+    // NUOVA FUNZIONE: Aggiorna il campo Targa quando il mezzo cambia
+    window.updateTarga = function(selectElement, targaInputId) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        // Recupera la targa dall'attributo data-targa dell'opzione selezionata
+        const targa = selectedOption.getAttribute('data-targa') || ''; 
+        document.getElementById(targaInputId).value = targa;
+    }
+
+    function calculateTotals() {
+        let totalTotaleOre = 0;
+        const totalRows = 3; 
+
+        for (let i = 1; i <= totalRows; i++) {
+            const oreViaggioInput = document.querySelector(`input[name="ore_viaggio_${i}"]`);
+            const oreLavoroInput = document.querySelector(`input[name="ore_lavoro_${i}"]`);
+            const oreTotaliInput = document.querySelector(`input[name="ore_totali_${i}"]`);
+
+            const oreViaggio = parseFloat(oreViaggioInput.value) || 0;
+            const oreLavoro = parseFloat(oreLavoroInput.value) || 0;
+
+            const rigaTotale = oreViaggio + oreLavoro;
+
+            oreTotaliInput.value = rigaTotale.toFixed(1);
+
+            totalTotaleOre += rigaTotale;
+        }
+
+        const totaleFinaleInput = document.querySelector('input[name="totale_finale"]');
+        totaleFinaleInput.value = totalTotaleOre.toFixed(1) + " H";
+    }
+
+    // --- INIZIALIZZAZIONE ---
+
     document.addEventListener('DOMContentLoaded', () => {
-        // Il campo numero di rapporto è ora manuale (nessuna funzione qui)
-        
         // Inizializza entrambi i canvas di firma
         initSignatureCanvas('clientSignatureCanvas');
         initSignatureCanvas('aisiSignatureCanvas');
 
-        // --- LOGICA CARICAMENTO DATALIST JSON ---
+        // Aggancia l'evento input a tutti i campi numerici per ricalcolare i totali
+        const numericalInputs = document.querySelectorAll('input[type="number"][step="0.5"]');
+        numericalInputs.forEach(input => {
+            input.addEventListener('input', calculateTotals);
+        });
+
+        calculateTotals();
+
 
         // 1. CARICAMENTO ANAGRAFICA CLIENTI
         const dataListClienti = document.getElementById('lista_clienti');
@@ -389,23 +547,36 @@
                 dataListClienti.innerHTML = '<option value="ERRORE: Lista clienti non disponibile.">';
             });
 
-        // 2. CARICAMENTO ANAGRAFICA MEZZI
-        const dataListMezzi = document.getElementById('lista_mezzi');
+        // 2. CARICAMENTO ANAGRAFICA MEZZI (Ora popola i <select>)
+        const mezzoSelects = document.querySelectorAll('select[name^="mezzo_"]');
+        
         fetch(GITHUB_MEZZI_URL)
             .then(response => response.ok ? response.json() : Promise.reject(`Mezzi status: ${response.status}`))
             .then(mezzi => {
-                if (Array.isArray(mezzi)) {
-                    mezzi.forEach(mezzo => {
-                        const option = document.createElement('option');
-                        option.value = mezzo;
-                        dataListMezzi.appendChild(option);
+                if (Array.isArray(mezzi) && mezzi.every(m => m.nome && m.targa)) {
+                    mezzoSelects.forEach(select => {
+                        mezzi.forEach(mezzo => {
+                            const option = document.createElement('option');
+                            option.value = mezzo.nome;
+                            // Visualizza nome e targa nell'elenco
+                            option.textContent = mezzo.nome + ' (' + mezzo.targa + ')'; 
+                            // Salva la targa nell'attributo data per l'autocompilazione
+                            option.setAttribute('data-targa', mezzo.targa); 
+                            select.appendChild(option);
+                        });
                     });
                     console.log(`Mezzi caricati: ${mezzi.length}`);
+                } else {
+                    console.warn('Il file mezzi.json non è nel formato atteso (array di oggetti con "nome" e "targa").');
                 }
             })
             .catch(error => {
                 console.error('Errore caricamento mezzi:', error);
-                dataListMezzi.innerHTML = '<option value="ERRORE: Lista mezzi non disponibile.">';
+                mezzoSelects.forEach(select => {
+                    const option = document.createElement('option');
+                    option.textContent = 'ERRORE: Lista mezzi non disponibile.';
+                    select.appendChild(option);
+                });
             });
     });
 </script>
