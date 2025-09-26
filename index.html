@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rapportino di Lavoro AISI S.r.l. (Responsive)</title>
+    <title>Rapportino di Lavoro AISI S.r.l. (Completo e Responsive)</title>
     <style>
         /* Variabili Globali */
         :root {
@@ -16,24 +16,23 @@
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             background-color: var(--secondary-color);
-            padding: 10px; /* Ridotto per mobile */
+            padding: 10px;
             color: var(--text-color);
         }
 
         .container {
             max-width: 900px;
-            margin: 20px auto; /* Ridotto per mobile */
+            margin: 20px auto;
             background-color: #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            padding: 15px; /* Ridotto per mobile */
+            padding: 15px;
         }
 
-        /* INTESTAZIONE */
+        /* INTESTAZIONE e CAMPI GENERALI */
         .header {
             display: flex;
-            flex-direction: column; /* Colonna per mobile */
-            justify-content: space-between;
+            flex-direction: column;
             align-items: flex-start;
             border-bottom: 3px solid var(--primary-color);
             padding-bottom: 10px;
@@ -41,7 +40,7 @@
         }
         .logo-section h1 {
             color: var(--primary-color);
-            font-size: 1.8em; /* Ridotto per mobile */
+            font-size: 1.8em;
             margin: 0;
         }
         .logo-section p {
@@ -53,7 +52,7 @@
             margin-top: 10px;
         }
         .doc-details h2 {
-            font-size: 1.3em; /* Ridotto per mobile */
+            font-size: 1.3em;
             margin: 0 0 5px 0;
             color: var(--primary-color);
         }
@@ -62,24 +61,21 @@
             border-bottom: 1px solid #343a40;
             text-align: center;
             font-weight: bold;
-            width: 70px; /* Ridotto per mobile */
+            width: 70px;
             padding: 2px 5px;
         }
-
-        /* INPUT GENERALI */
-        .info-group {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 0;
-        }
         .info-field {
-            width: 100%; /* Forza colonna singola su mobile */
+            width: 100%;
             padding-right: 0;
             margin-bottom: 15px;
             box-sizing: border-box;
         }
-        .info-field strong {
-            font-size: 0.85em;
+        .section-title {
+            font-size: 1em;
+            padding-left: 8px;
+            margin-top: 20px;
+            border-left: 4px solid var(--primary-color);
+            font-weight: bold;
         }
         input[type="text"], input[type="number"], input[type="date"], textarea {
             padding: 8px 10px;
@@ -89,24 +85,16 @@
             width: 100%;
             box-sizing: border-box;
         }
-        textarea {
-            min-height: 80px;
-        }
-        .section-title {
-            font-size: 1em;
-            padding-left: 8px;
-            margin-top: 20px;
-        }
 
-        /* TABELLA RESPONSIVE */
+        /* TABELLA RESPONSIVE (4 COLONNE) */
         .table-container {
-            overflow-x: auto; /* Permette lo scorrimento orizzontale */
+            overflow-x: auto;
             margin-top: 20px;
             -webkit-overflow-scrolling: touch;
         }
         table {
             width: 100%;
-            min-width: 600px; /* Larghezza minima per evitare compressione */
+            min-width: 550px;
             border-collapse: collapse;
             font-size: 0.9em;
         }
@@ -119,82 +107,113 @@
             background-color: var(--primary-color);
             color: #fff;
             text-align: center;
+            white-space: nowrap;
+        }
+        .table-input {
+            padding: 0;
         }
         .table-input input {
-            padding: 5px;
+            border: none;
+            text-align: center;
+            padding: 8px 5px;
+            height: 100%;
             font-size: 0.9em;
         }
+        table th:nth-child(1) { width: 50%; }
+        table th:nth-child(2), table th:nth-child(3) { width: 15%; }
+        table th:nth-child(4) { width: 20%; }
         .total-row td {
             background-color: #f1f1f1;
             font-weight: bold;
         }
 
-        /* BLOCCO FIRME */
+        /* FIRMA TRADIZIONALE */
         .signature-block {
             margin-top: 30px;
-            flex-direction: column; /* Colonna per mobile */
-            align-items: center;
+            padding-top: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .signature-area {
             width: 90%;
-            margin-top: 20px;
+            margin: 10px 0;
+            text-align: center;
         }
         .signature-line {
-            height: 20px;
+            border-bottom: 1px dashed #666;
+            margin: 10px 0 5px 0;
+            height: 30px;
         }
+        .signature-area p {
+            font-size: 0.9em;
+            color: #555;
+            margin: 0;
+        }
+
+        /* STILI FIRMA DIGITALE */
+        .digital-signature-block {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .signature-section {
+            margin-bottom: 25px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .signature-section h3 {
+            font-size: 1em;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        canvas {
+            border: 1px solid var(--border-color);
+            display: block;
+            width: 100%;
+            touch-action: none; /* ESSENZIALE per la firma su mobile */
+        }
+        .signature-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .signature-buttons button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            width: 48%;
+        }
+        .clear-button { background-color: #dc3545; color: white; }
+        .save-button { background-color: #28a745; color: white; }
 
         /* FOOTER */
         .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
             font-size: 0.75em;
-            padding-top: 10px;
-            margin-top: 20px;
+            text-align: center;
+            color: #6c757d;
         }
-        .footer p {
-            margin: 5px 0;
-        }
-        .footer span {
-            display: block; /* Ogni elemento su una nuova riga su mobile */
-        }
+        .footer p { margin: 5px 0; }
+        .footer span { display: block; }
         
-        /* Media Query per Schermi Più Grandi (Tablet/Desktop) */
+        /* Media Query per Desktop */
         @media (min-width: 600px) {
-            .container {
-                padding: 30px;
-            }
-            .header {
-                flex-direction: row; /* Torna a riga */
-                align-items: center;
-            }
-            .doc-details {
-                text-align: right;
-                margin-top: 0;
-            }
-            .logo-section h1 {
-                font-size: 2.2em;
-            }
-            .doc-details h2 {
-                font-size: 1.5em;
-            }
-            .info-field {
-                width: 50%; /* Due campi per riga */
-                padding-right: 20px;
-            }
-            .info-field:last-child {
-                width: 30%; /* Adattamento per Data */
-                padding-right: 0;
-            }
-            .info-field:nth-child(2) {
-                width: 70%; /* Adattamento per Cantiere */
-            }
-            .signature-block {
-                flex-direction: row; /* Torna a riga */
-            }
-            .signature-area {
-                width: 45%;
-            }
-             .footer span {
-                display: inline-block; /* Elementi sulla stessa riga */
-            }
+            .header { flex-direction: row; align-items: center; }
+            .doc-details { text-align: right; margin-top: 0; }
+            .info-field:first-child { width: 100%; padding-right: 0; }
+            .info-field:nth-child(2) { width: 70%; padding-right: 20px; }
+            .info-field:nth-child(3) { width: 30%; padding-right: 0; }
+            .signature-block { flex-direction: row; }
+            .signature-area { width: 45%; margin: 0; }
+            .digital-signature-block { display: flex; justify-content: space-between; }
+            .signature-section { width: 48%; }
+            .footer span { display: inline-block; margin: 0 10px; }
         }
     </style>
 </head>
@@ -205,8 +224,6 @@
         <div class="logo-section">
             <h1>AISI S.r.l.</h1>
             <p>www.aisiautogru.it</p>
-            <small>Member of CiBQ Federation</small><br>
-            <small>CERTIFIED MANAGEMENT SYSTEM ISO 9001 - ISO 45001 (Esempio)</small>
         </div>
         <div class="doc-details">
             <h2>Rapportino di Lavoro</h2>
@@ -218,7 +235,6 @@
         <div class="info-field" style="width: 100%;">
             <strong>SPETT.LE Cliente:</strong>
             <input type="text" name="cliente_spettabile" list="lista_clienti" placeholder="Inizia a digitare il nome del cliente...">
-            
             <datalist id="lista_clienti"></datalist>
         </div>
         
@@ -233,63 +249,81 @@
     </div>
     
     <div class="section-title">Descrizione Lavoro</div>
-    <textarea name="descrizione_lavoro" placeholder="Inserire qui i dettagli del lavoro svolto (es. Trasporto e posizionamento di travi in acciaio, ecc...)"></textarea>
+    <textarea name="descrizione_lavoro" placeholder="Inserire qui i dettagli del lavoro svolto..."></textarea>
 
-    <div class="section-title">Dettaglio Mezzi e Personale</div>
+    <div class="section-title">Dettaglio Mezzi Utilizzati</div>
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th rowspan="2" style="width: 55%;">MEZZI - PERSONALE</th>
-                    <th colspan="2">ORE</th>
-                    <th rowspan="2" style="width: 15%;">TOT. ORE<br> LAVORO + VIAGGIO</th>
-                </tr>
-                <tr>
-                    <th style="width: 15%;">DI VIAGGIO</th>
-                    <th style="width: 15%;">DI LAVORO</th>
+                    <th>MEZZO</th>
+                    <th>ORE VIAGGIO</th>
+                    <th>ORE LAVORO</th>
+                    <th>TOT. ORE<br> LAVORO + VIAGGIO</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><input type="text" name="mezzo_pers_1" placeholder="Es. Autogru 60t / Operatore Rossi"></td>
+                    <td><input type="text" name="mezzo_1" list="lista_mezzi" placeholder="Seleziona o digita il mezzo"></td>
                     <td class="table-input"><input type="number" name="ore_viaggio_1" min="0" step="0.5"></td>
                     <td class="table-input"><input type="number" name="ore_lavoro_1" min="0" step="0.5"></td>
                     <td class="table-input"><input type="number" name="ore_totali_1" min="0" step="0.5"></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="mezzo_pers_2" placeholder="Es. Camion con Gru / Operatore Bianchi"></td>
+                    <td><input type="text" name="mezzo_2" list="lista_mezzi" placeholder="Seleziona o digita il mezzo"></td>
                     <td class="table-input"><input type="number" name="ore_viaggio_2" min="0" step="0.5"></td>
                     <td class="table-input"><input type="number" name="ore_lavoro_2" min="0" step="0.5"></td>
                     <td class="table-input"><input type="number" name="ore_totali_2" min="0" step="0.5"></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="mezzo_pers_3"></td>
+                    <td><input type="text" name="mezzo_3" list="lista_mezzi"></td>
                     <td class="table-input"><input type="number" name="ore_viaggio_3" min="0" step="0.5"></td>
                     <td class="table-input"><input type="number" name="ore_lavoro_3" min="0" step="0.5"></td>
                     <td class="table-input"><input type="number" name="ore_totali_3" min="0" step="0.5"></td>
                 </tr>
                 <tr class="total-row">
-                    <td style="text-align: right; border: none; background-color: transparent;"></td>
-                    <td style="text-align: right; font-weight: bold; padding: 10px;" colspan="2">TOTALE ORE LAVORATE:</td>
+                    <td style="text-align: right; border: none; background-color: transparent;" colspan="3">TOTALE ORE LAVORATE:</td>
                     <td class="table-input"><input type="text" name="totale_finale" readonly placeholder="Auto-calcolato"></td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <datalist id="lista_mezzi"></datalist>
 
     <div class="signature-block">
         <div class="signature-area">
-            <p>Per AISI S.r.l.</p>
+            <p>Per AISI S.r.l. (Firma cartacea/Timbro)</p>
             <div class="signature-line"></div>
-            <p>(Timbro e Firma)</p>
         </div>
         <div class="signature-area">
-            <p>Per il Cliente</p>
+            <p>Per il Cliente (Firma cartacea/Timbro)</p>
             <div class="signature-line"></div>
-            <p>(Timbro e Firma per accettazione)</p>
         </div>
     </div>
-
+    
+    <div class="digital-signature-block">
+        
+        <div class="signature-section">
+            <h3>Firma Digitale Cliente</h3>
+            <canvas id="clientSignatureCanvas" width="300" height="150"></canvas>
+            <div class="signature-buttons">
+                <button type="button" class="clear-button" onclick="clearCanvas('clientSignatureCanvas')">Annulla</button>
+                <button type="button" class="save-button" onclick="saveSignature('clientSignatureCanvas', 'clientSignatureData')">Salva Firma</button>
+            </div>
+            <input type="hidden" id="clientSignatureData" name="client_signature_data">
+        </div>
+        
+        <div class="signature-section">
+            <h3>Firma Digitale Operatore AISI S.r.l.</h3>
+            <canvas id="aisiSignatureCanvas" width="300" height="150"></canvas>
+            <div class="signature-buttons">
+                <button type="button" class="clear-button" onclick="clearCanvas('aisiSignatureCanvas')">Annulla</button>
+                <button type="button" class="save-button" onclick="saveSignature('aisiSignatureCanvas', 'aisiSignatureData')">Salva Firma</button>
+            </div>
+            <input type="hidden" id="aisiSignatureData" name="aisi_signature_data">
+        </div>
+        
+    </div>
     <div class="footer">
         <p>Sede Amm.: Via Circumvallazione, 108 - 83100 Avellino</p>
         <p><span>Tel. 0825 782675</span> - <span>Fax 0825 785821</span> - <span>e-mail: info@aisiautogru.it</span></p>
@@ -298,34 +332,128 @@
 </div>
 
 <script>
-    // ⚠️ ATTENZIONE: SOSTITUISCI QUESTO URL CON IL LINK RAW DEL TUO FILE clienti.json SU GITHUB
-    const GITHUB_JSON_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/clienti.json'; 
+    // ⚠️ URL CLIENTE: Assicurati che questo sia il link RAW corretto
+    const GITHUB_CLIENTI_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/clienti.json';
+    
+    // ⚠️ URL MEZZI: Assicurati che questo sia il link RAW corretto
+    const GITHUB_MEZZI_URL = 'https://raw.githubusercontent.com/ambrosonem-hub/AISI/main/mezzi.json'; 
+
+    // --- LOGICA FIRMA DIGITALE (Canvas) ---
+
+    function initSignatureCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        // Impostazioni disegno
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000000'; 
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height); // Riempi lo sfondo
+
+        function getCoords(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        ['mousedown', 'touchstart'].forEach(eventName => {
+            canvas.addEventListener(eventName, (e) => {
+                e.preventDefault(); 
+                isDrawing = true;
+                const { x, y } = getCoords(e);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            });
+        });
+
+        ['mousemove', 'touchmove'].forEach(eventName => {
+            canvas.addEventListener(eventName, (e) => {
+                if (!isDrawing) return;
+                e.preventDefault(); 
+                const { x, y } = getCoords(e);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            });
+        });
+
+        ['mouseup', 'mouseout', 'touchend'].forEach(eventName => {
+            canvas.addEventListener(eventName, () => {
+                isDrawing = false;
+            });
+        });
+    }
+
+    window.clearCanvas = function(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            document.getElementById(canvasId.replace('Canvas', 'Data')).value = '';
+        }
+    }
+
+    window.saveSignature = function(canvasId, inputId) {
+        const canvas = document.getElementById(canvasId);
+        const input = document.getElementById(inputId);
+        if (canvas && input) {
+            const dataURL = canvas.toDataURL('image/png');
+            input.value = dataURL;
+            alert('Firma salvata correttamente!');
+        }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
-        const dataList = document.getElementById('lista_clienti');
-        
-        fetch(GITHUB_JSON_URL)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Impossibile recuperare clienti.json. Status: ${response.status}`);
-                }
-                return response.json();
-            })
+        // Inizializza entrambi i canvas di firma
+        initSignatureCanvas('clientSignatureCanvas');
+        initSignatureCanvas('aisiSignatureCanvas');
+
+        // --- LOGICA CARICAMENTO JSON ---
+
+        // 1. CARICAMENTO ANAGRAFICA CLIENTI
+        const dataListClienti = document.getElementById('lista_clienti');
+        fetch(GITHUB_CLIENTI_URL)
+            .then(response => response.ok ? response.json() : Promise.reject(`Clienti status: ${response.status}`))
             .then(clienti => {
                 if (Array.isArray(clienti)) {
                     clienti.forEach(cliente => {
                         const option = document.createElement('option');
                         option.value = cliente;
-                        dataList.appendChild(option);
+                        dataListClienti.appendChild(option);
                     });
-                    console.log(`Anagrafica caricata: ${clienti.length} clienti trovati.`);
-                } else {
-                    console.error('Il file JSON non è formattato come un array di stringhe.');
                 }
             })
             .catch(error => {
-                console.error('Errore di connessione o di caricamento anagrafica:', error);
-                dataList.innerHTML = '<option value="ERRORE: Lista non disponibile. Digitare manualmente.">';
+                console.error('Errore caricamento clienti:', error);
+                dataListClienti.innerHTML = '<option value="ERRORE: Lista clienti non disponibile.">';
+            });
+
+        // 2. CARICAMENTO ANAGRAFICA MEZZI
+        const dataListMezzi = document.getElementById('lista_mezzi');
+        fetch(GITHUB_MEZZI_URL)
+            .then(response => response.ok ? response.json() : Promise.reject(`Mezzi status: ${response.status}`))
+            .then(mezzi => {
+                if (Array.isArray(mezzi)) {
+                    mezzi.forEach(mezzo => {
+                        const option = document.createElement('option');
+                        option.value = mezzo;
+                        dataListMezzi.appendChild(option);
+                    });
+                    console.log(`Mezzi caricati: ${mezzi.length}`);
+                }
+            })
+            .catch(error => {
+                console.error('Errore caricamento mezzi:', error);
+                dataListMezzi.innerHTML = '<option value="ERRORE: Lista mezzi non disponibile.">';
             });
     });
 </script>
