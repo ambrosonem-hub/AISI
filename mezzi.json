@@ -1,8 +1,22 @@
 [
-  "Autogru 60t - Liebherr LTM 1060-3.1 - Targa AA123ZZ",
-  "Autocarro con Gru - Iveco Stralis con Fassi F150 - Targa BB456YY",
-  "Piattaforma Aerea Cingolata - JLG X19J - Matricola PT007",
-  "Carrello Elevatore Telescopico - Merlo Roto 40.25 - Targa CC789XX",
-  "Camion Trasporto Eccezionale - Scania R500 - Targa DD012WW",
-  "Furgone Assistenza Rapida - Fiat Ducato"
+  {
+    "nome": "Autogru 50 Ton",
+    "targa": "AA123BB"
+  },
+  {
+    "nome": "Piattaforma Aerea 20M",
+    "targa": "CC456DD"
+  },
+  {
+    "nome": "Carrello Elevatore 8T",
+    "targa": "EE789FF"
+  },
+  {
+    "nome": "Furgone Trasporto",
+    "targa": "GG012HH"
+  },
+  {
+    "nome": "Camion con Gru 3 Assi",
+    "targa": "LL345MM"
+  }
 ]
