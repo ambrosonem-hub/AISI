@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapportino di Lavoro AISI S.r.l. (Dinamico)</title>
+    <style>
+        /* CSS per una grafica pulita e professionale */
+        :root {
+            --primary-color: #004080;
+            --secondary-color: #f8f9fa;
+            --border-color: #dee2e6;
+            --text-color: #343a40;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--secondary-color);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 30px;
+            color: var(--text-color);
+        }
+
+        /* INTESTAZIONE E LOGO */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo-section h1 {
+            color: var(--primary-color);
+            font-size: 2.2em;
+            margin: 0;
+            font-weight: 700;
+        }
+        .logo-section p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .doc-details {
+            text-align: right;
+        }
+        .doc-details h2 {
+            font-size: 1.5em;
+            color: var(--primary-color);
+            margin: 0 0 5px 0;
+        }
+        .doc-number {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .doc-number input {
+            border: none;
+            border-bottom: 1px solid #343a40;
+            text-align: center;
+            font-weight: bold;
+            width: 80px;
+            padding: 2px 5px;
+        }
+
+        /* BLOCCHI INFORMAZIONI E INPUT */
+        .section-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        .info-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .info-field {
+            padding-right: 20px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .info-field strong {
+            display: block;
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 3px;
+        }
+        input[type="text"], input[type="number"], input[type="date"], textarea {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            border-radius: 4px;
+            min-height: 25px;
+            background-color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 64, 128, 0.2);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* TABELLA ORE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: #fff;
+            text-align: center;
+            font-weight: 600;
+        }
+        .table-input {
+            padding: 0;
+        }
+        .table-input input {
+            border: none;
+            text-align: center;
+            padding: 8px 5px;
+            height: 100%;
+            font-size: 0.95em;
+        }
+
+        .total-row td {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+
+        /* BLOCCO FIRME */
+        .signature-block {
+            margin-top: 50px;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature-area {
+            width: 45%;
+            text-align: center;
+        }
+        .signature-line {
+            border-bottom: 1px dashed #666;
+            margin: 10px 0 5px 0;
+            height: 30px;
+        }
+        .signature-area p {
+            font-size: 0.9em;
+            color: #555;
+            margin: 0;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.8em;
+            text-align: center;
+            color: #6c757d;
+        }
+        .footer span {
+            margin: 0 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo-section">
+            <h1>AISI S.r.l.</h1>
+            <p>www.aisiautogru.it</p>
+            <small>Member of CiBQ Federation</small><br>
+            <small>CERTIFIED MANAGEMENT SYSTEM ISO 9001 - ISO 45001 (Esempio)</small>
+        </div>
+        <div class="doc-details">
+            <h2>Rapportino di Lavoro</h2>
+            <div class="doc-number">N°: <input type="text" name="rapportino_n" value="" size="8"></div>
+        </div>
+    </div>
+
+    <div class="info-group">
+        <div class="info-field" style="width: 100%;">
+            <strong>SPETT.LE Cliente:</strong>
+            <input type="text" name="cliente_spettabile" list="lista_clienti" placeholder="Inizia a digitare il nome del cliente (lista caricata da GitHub)...">
+            
+            <datalist id="lista_clienti"></datalist>
+        </div>
+        
+        <div class="info-field" style="width: 70%;">
+            <strong>CANTIERE di:</strong>
+            <input type="text" name="cantiere_di">
+        </div>
+        <div class="info-field" style="width: 30%; padding-right: 0;">
+            <strong>Data del Servizio:</strong>
+            <input type="date" name="data_servizio">
+        </div>
+    </div>
+    
+    <div class="section-title">Descrizione Lavoro</div>
+    <textarea name="descrizione_lavoro" placeholder="Inserire qui i dettagli del lavoro svolto (es. Trasporto e posizionamento di travi in acciaio, ecc...)"></textarea>
+
+    <div class="section-title">Dettaglio Mezzi e Personale</div>
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2" style="width: 55%;">MEZZI - PERSONALE</th>
+                <th colspan="2">ORE</th>
+                <th rowspan="2" style="width: 15%;">TOT. ORE<br> LAVORO + VIAGGIO</th>
+            </tr>
+            <tr>
+                <th style="width: 15%;">DI VIAGGIO</th>
+                <th style="width: 15%;">DI LAVORO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" name="mezzo_pers_1" placeholder="Es. Autogru 60t / Operatore Rossi"></td>
+                <td class="table-input"><input type="number" name="ore_viaggio_1" min="0" step="0.5"></td>
+                <td class="table-input"><input type="number" name="ore_lavoro_1" min="0" step="0.5"></td>
+                <td class="table-input"><input type="number" name="ore_totali_1" min="0" step="0.5"></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mezzo_pers_2" placeholder="Es. Camion con Gru / Operatore Bianchi"></td>
+                <td class="table-input"><input type="number" name="ore_viaggio_2" min="0" step="0.5"></td>
+                <td class="table-input"><input type="number" name="ore_lavoro_2" min="0" step="0.5"></td>
+                <td class="table-input"><input type="number" name="ore_totali_2" min="0" step="0.5"></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mezzo_pers_3"></td>
+                <td class="table-input"><input type="number" name="ore_viaggio_3" min="0" step="0.5"></td>
+                <td class="table-input"><input type="number" name="ore_lavoro_3" min="0" step="0.5"></td>
+                <td class="table-input"><input type="number" name="ore_totali_3" min="0" step="0.5"></td>
+            </tr>
+            <tr class="total-row">
+                <td style="text-align: right; border: none; background-color: transparent;"></td>
+                <td style="text-align: right; font-weight: bold; padding: 10px;" colspan="2">TOTALE ORE LAVORATE:</td>
+                <td class="table-input"><input type="text" name="totale_finale" readonly placeholder="Auto-calcolato"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="signature-block">
+        <div class="signature-area">
+            [cite_start]<p>Per AISI S.r.l. [cite: 11]</p>
+            <div class="signature-line"></div>
+            <p>(Timbro e Firma)</p>
+        </div>
+        <div class="signature-area">
+            [cite_start]<p>Per il Cliente [cite: 12]</p>
+            <div class="signature-line"></div>
+            <p>(Timbro e Firma per accettazione)</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        [cite_start]<p>Sede Amm.: Via Circumvallazione, 108 - 83100 Avellino [cite: 13]</p>
+        <p><span>Tel. 0825 782675</span> - <span>Fax 0825 785821</span> - <span>e-mail: info@aisiautogru.it</span></p>
+        [cite_start]<p>Partita IVA: 02481560643 [cite: 13]</p>
+    </div>
+</div>
+
+<script>
+    // ⚠️ ATTENZIONE: SOSTITUISCI QUESTO URL CON IL LINK RAW DEL TUO FILE clienti.json SU GITHUB
+    const GITHUB_JSON_URL = 'https://raw.githubusercontent.com/Tu-Utente/Tu-Repo/main/clienti.json'; 
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const dataList = document.getElementById('lista_clienti');
+        
+        // Funzione per recuperare e popolare la datalist
+        fetch(GITHUB_JSON_URL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Impossibile recuperare clienti.json. Verifica l\'URL o l\'accesso.');
+                }
+                return response.json();
+            })
+            .then(clienti => {
+                if (Array.isArray(clienti)) {
+                    clienti.forEach(cliente => {
+                        const option = document.createElement('option');
+                        option.value = cliente;
+                        dataList.appendChild(option);
+                    });
+                    console.log(`Anagrafica caricata: ${clienti.length} clienti trovati.`);
+                } else {
+                    console.error('Il file JSON non è formattato come un array di stringhe.');
+                }
+            })
+            .catch(error => {
+                console.error('Errore di connessione o di caricamento anagrafica:', error);
+                // Messaggio di errore visibile all'utente nella lista
+                dataList.innerHTML = '<option value="ERRORE: Lista non disponibile. Digitare manualmente.">';
+            });
+    });
+</script>
+
+</body>
+</html>
