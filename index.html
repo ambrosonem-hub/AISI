@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rapportino di Lavoro AISI S.r.l. (Dinamico)</title>
+    <title>Rapportino di Lavoro AISI S.r.l. (Responsive)</title>
     <style>
-        /* CSS per una grafica pulita e professionale */
+        /* Variabili Globali */
         :root {
             --primary-color: #004080;
             --secondary-color: #f8f9fa;
@@ -16,134 +16,114 @@
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             background-color: var(--secondary-color);
-            padding: 20px;
+            padding: 10px; /* Ridotto per mobile */
+            color: var(--text-color);
         }
 
         .container {
             max-width: 900px;
-            margin: 40px auto;
+            margin: 20px auto; /* Ridotto per mobile */
             background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
             border-radius: 8px;
-            padding: 30px;
-            color: var(--text-color);
+            padding: 15px; /* Ridotto per mobile */
         }
 
-        /* INTESTAZIONE E LOGO */
+        /* INTESTAZIONE */
         .header {
             display: flex;
+            flex-direction: column; /* Colonna per mobile */
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
         .logo-section h1 {
             color: var(--primary-color);
-            font-size: 2.2em;
+            font-size: 1.8em; /* Ridotto per mobile */
             margin: 0;
-            font-weight: 700;
         }
         .logo-section p {
+            font-size: 0.8em;
             margin: 0;
-            font-size: 0.9em;
-            color: #6c757d;
         }
         .doc-details {
-            text-align: right;
+            text-align: left;
+            margin-top: 10px;
         }
         .doc-details h2 {
-            font-size: 1.5em;
-            color: var(--primary-color);
+            font-size: 1.3em; /* Ridotto per mobile */
             margin: 0 0 5px 0;
-        }
-        .doc-number {
-            font-weight: bold;
-            font-size: 1.2em;
+            color: var(--primary-color);
         }
         .doc-number input {
             border: none;
             border-bottom: 1px solid #343a40;
             text-align: center;
             font-weight: bold;
-            width: 80px;
+            width: 70px; /* Ridotto per mobile */
             padding: 2px 5px;
         }
 
-        /* BLOCCHI INFORMAZIONI E INPUT */
-        .section-title {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: var(--primary-color);
-            border-left: 4px solid var(--primary-color);
-            padding-left: 10px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
+        /* INPUT GENERALI */
         .info-group {
             display: flex;
             flex-wrap: wrap;
-            margin-bottom: 15px;
+            margin-bottom: 0;
         }
         .info-field {
-            padding-right: 20px;
+            width: 100%; /* Forza colonna singola su mobile */
+            padding-right: 0;
             margin-bottom: 15px;
             box-sizing: border-box;
         }
         .info-field strong {
-            display: block;
-            font-size: 0.9em;
-            color: #555;
-            margin-bottom: 3px;
+            font-size: 0.85em;
         }
         input[type="text"], input[type="number"], input[type="date"], textarea {
-            border: 1px solid var(--border-color);
             padding: 8px 10px;
+            font-size: 1em;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-            min-height: 25px;
-            background-color: #fff;
             width: 100%;
             box-sizing: border-box;
         }
-        input:focus, textarea:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(0, 64, 128, 0.2);
-        }
         textarea {
-            resize: vertical;
             min-height: 80px;
         }
+        .section-title {
+            font-size: 1em;
+            padding-left: 8px;
+            margin-top: 20px;
+        }
 
-        /* TABELLA ORE */
+        /* TABELLA RESPONSIVE */
+        .table-container {
+            overflow-x: auto; /* Permette lo scorrimento orizzontale */
+            margin-top: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
         table {
             width: 100%;
+            min-width: 600px; /* Larghezza minima per evitare compressione */
             border-collapse: collapse;
-            margin-top: 25px;
-            font-size: 0.95em;
+            font-size: 0.9em;
         }
         th, td {
             border: 1px solid var(--border-color);
-            padding: 8px 10px;
+            padding: 8px 5px;
             text-align: left;
         }
         th {
             background-color: var(--primary-color);
             color: #fff;
             text-align: center;
-            font-weight: 600;
-        }
-        .table-input {
-            padding: 0;
         }
         .table-input input {
-            border: none;
-            text-align: center;
-            padding: 8px 5px;
-            height: 100%;
-            font-size: 0.95em;
+            padding: 5px;
+            font-size: 0.9em;
         }
-
         .total-row td {
             background-color: #f1f1f1;
             font-weight: bold;
@@ -151,38 +131,70 @@
 
         /* BLOCCO FIRME */
         .signature-block {
-            margin-top: 50px;
-            padding-top: 20px;
-            display: flex;
-            justify-content: space-between;
+            margin-top: 30px;
+            flex-direction: column; /* Colonna per mobile */
+            align-items: center;
         }
         .signature-area {
-            width: 45%;
-            text-align: center;
+            width: 90%;
+            margin-top: 20px;
         }
         .signature-line {
-            border-bottom: 1px dashed #666;
-            margin: 10px 0 5px 0;
-            height: 30px;
-        }
-        .signature-area p {
-            font-size: 0.9em;
-            color: #555;
-            margin: 0;
+            height: 20px;
         }
 
         /* FOOTER */
         .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.8em;
-            text-align: center;
-            color: #6c757d;
+            font-size: 0.75em;
+            padding-top: 10px;
+            margin-top: 20px;
+        }
+        .footer p {
+            margin: 5px 0;
         }
         .footer span {
-            margin: 0 10px;
-            display: inline-block;
+            display: block; /* Ogni elemento su una nuova riga su mobile */
+        }
+        
+        /* Media Query per Schermi Più Grandi (Tablet/Desktop) */
+        @media (min-width: 600px) {
+            .container {
+                padding: 30px;
+            }
+            .header {
+                flex-direction: row; /* Torna a riga */
+                align-items: center;
+            }
+            .doc-details {
+                text-align: right;
+                margin-top: 0;
+            }
+            .logo-section h1 {
+                font-size: 2.2em;
+            }
+            .doc-details h2 {
+                font-size: 1.5em;
+            }
+            .info-field {
+                width: 50%; /* Due campi per riga */
+                padding-right: 20px;
+            }
+            .info-field:last-child {
+                width: 30%; /* Adattamento per Data */
+                padding-right: 0;
+            }
+            .info-field:nth-child(2) {
+                width: 70%; /* Adattamento per Cantiere */
+            }
+            .signature-block {
+                flex-direction: row; /* Torna a riga */
+            }
+            .signature-area {
+                width: 45%;
+            }
+             .footer span {
+                display: inline-block; /* Elementi sulla stessa riga */
+            }
         }
     </style>
 </head>
@@ -205,16 +217,16 @@
     <div class="info-group">
         <div class="info-field" style="width: 100%;">
             <strong>SPETT.LE Cliente:</strong>
-            <input type="text" name="cliente_spettabile" list="lista_clienti" placeholder="Inizia a digitare il nome del cliente (lista caricata da GitHub)...">
+            <input type="text" name="cliente_spettabile" list="lista_clienti" placeholder="Inizia a digitare il nome del cliente...">
             
             <datalist id="lista_clienti"></datalist>
         </div>
         
-        <div class="info-field" style="width: 70%;">
+        <div class="info-field">
             <strong>CANTIERE di:</strong>
             <input type="text" name="cantiere_di">
         </div>
-        <div class="info-field" style="width: 30%; padding-right: 0;">
+        <div class="info-field">
             <strong>Data del Servizio:</strong>
             <input type="date" name="data_servizio">
         </div>
@@ -224,62 +236,64 @@
     <textarea name="descrizione_lavoro" placeholder="Inserire qui i dettagli del lavoro svolto (es. Trasporto e posizionamento di travi in acciaio, ecc...)"></textarea>
 
     <div class="section-title">Dettaglio Mezzi e Personale</div>
-    <table>
-        <thead>
-            <tr>
-                <th rowspan="2" style="width: 55%;">MEZZI - PERSONALE</th>
-                <th colspan="2">ORE</th>
-                <th rowspan="2" style="width: 15%;">TOT. ORE<br> LAVORO + VIAGGIO</th>
-            </tr>
-            <tr>
-                <th style="width: 15%;">DI VIAGGIO</th>
-                <th style="width: 15%;">DI LAVORO</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="text" name="mezzo_pers_1" placeholder="Es. Autogru 60t / Operatore Rossi"></td>
-                <td class="table-input"><input type="number" name="ore_viaggio_1" min="0" step="0.5"></td>
-                <td class="table-input"><input type="number" name="ore_lavoro_1" min="0" step="0.5"></td>
-                <td class="table-input"><input type="number" name="ore_totali_1" min="0" step="0.5"></td>
-            </tr>
-            <tr>
-                <td><input type="text" name="mezzo_pers_2" placeholder="Es. Camion con Gru / Operatore Bianchi"></td>
-                <td class="table-input"><input type="number" name="ore_viaggio_2" min="0" step="0.5"></td>
-                <td class="table-input"><input type="number" name="ore_lavoro_2" min="0" step="0.5"></td>
-                <td class="table-input"><input type="number" name="ore_totali_2" min="0" step="0.5"></td>
-            </tr>
-            <tr>
-                <td><input type="text" name="mezzo_pers_3"></td>
-                <td class="table-input"><input type="number" name="ore_viaggio_3" min="0" step="0.5"></td>
-                <td class="table-input"><input type="number" name="ore_lavoro_3" min="0" step="0.5"></td>
-                <td class="table-input"><input type="number" name="ore_totali_3" min="0" step="0.5"></td>
-            </tr>
-            <tr class="total-row">
-                <td style="text-align: right; border: none; background-color: transparent;"></td>
-                <td style="text-align: right; font-weight: bold; padding: 10px;" colspan="2">TOTALE ORE LAVORATE:</td>
-                <td class="table-input"><input type="text" name="totale_finale" readonly placeholder="Auto-calcolato"></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" style="width: 55%;">MEZZI - PERSONALE</th>
+                    <th colspan="2">ORE</th>
+                    <th rowspan="2" style="width: 15%;">TOT. ORE<br> LAVORO + VIAGGIO</th>
+                </tr>
+                <tr>
+                    <th style="width: 15%;">DI VIAGGIO</th>
+                    <th style="width: 15%;">DI LAVORO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="mezzo_pers_1" placeholder="Es. Autogru 60t / Operatore Rossi"></td>
+                    <td class="table-input"><input type="number" name="ore_viaggio_1" min="0" step="0.5"></td>
+                    <td class="table-input"><input type="number" name="ore_lavoro_1" min="0" step="0.5"></td>
+                    <td class="table-input"><input type="number" name="ore_totali_1" min="0" step="0.5"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="mezzo_pers_2" placeholder="Es. Camion con Gru / Operatore Bianchi"></td>
+                    <td class="table-input"><input type="number" name="ore_viaggio_2" min="0" step="0.5"></td>
+                    <td class="table-input"><input type="number" name="ore_lavoro_2" min="0" step="0.5"></td>
+                    <td class="table-input"><input type="number" name="ore_totali_2" min="0" step="0.5"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="mezzo_pers_3"></td>
+                    <td class="table-input"><input type="number" name="ore_viaggio_3" min="0" step="0.5"></td>
+                    <td class="table-input"><input type="number" name="ore_lavoro_3" min="0" step="0.5"></td>
+                    <td class="table-input"><input type="number" name="ore_totali_3" min="0" step="0.5"></td>
+                </tr>
+                <tr class="total-row">
+                    <td style="text-align: right; border: none; background-color: transparent;"></td>
+                    <td style="text-align: right; font-weight: bold; padding: 10px;" colspan="2">TOTALE ORE LAVORATE:</td>
+                    <td class="table-input"><input type="text" name="totale_finale" readonly placeholder="Auto-calcolato"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="signature-block">
         <div class="signature-area">
-            [cite_start]<p>Per AISI S.r.l. [cite: 11]</p>
+            <p>Per AISI S.r.l.</p>
             <div class="signature-line"></div>
             <p>(Timbro e Firma)</p>
         </div>
         <div class="signature-area">
-            [cite_start]<p>Per il Cliente [cite: 12]</p>
+            <p>Per il Cliente</p>
             <div class="signature-line"></div>
             <p>(Timbro e Firma per accettazione)</p>
         </div>
     </div>
 
     <div class="footer">
-        [cite_start]<p>Sede Amm.: Via Circumvallazione, 108 - 83100 Avellino [cite: 13]</p>
+        <p>Sede Amm.: Via Circumvallazione, 108 - 83100 Avellino</p>
         <p><span>Tel. 0825 782675</span> - <span>Fax 0825 785821</span> - <span>e-mail: info@aisiautogru.it</span></p>
-        [cite_start]<p>Partita IVA: 02481560643 [cite: 13]</p>
+        <p>Partita IVA: 02481560643</p>
     </div>
 </div>
 
@@ -290,11 +304,10 @@
     document.addEventListener('DOMContentLoaded', () => {
         const dataList = document.getElementById('lista_clienti');
         
-        // Funzione per recuperare e popolare la datalist
         fetch(GITHUB_JSON_URL)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Impossibile recuperare clienti.json. Verifica l\'URL o l\'accesso.');
+                    throw new Error(`Impossibile recuperare clienti.json. Status: ${response.status}`);
                 }
                 return response.json();
             })
@@ -312,7 +325,6 @@
             })
             .catch(error => {
                 console.error('Errore di connessione o di caricamento anagrafica:', error);
-                // Messaggio di errore visibile all'utente nella lista
                 dataList.innerHTML = '<option value="ERRORE: Lista non disponibile. Digitare manualmente.">';
             });
     });
