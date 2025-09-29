@@ -216,8 +216,12 @@
         
         /* Media Query per Tablet e Desktop (Layout Orizzontale) */
         @media (min-width: 600px) {
-            .digital-signature-block { flex-direction: row; }
-            .signature-section { width: 48%; }
+            /* MODIFICHE QUI: Riduco la larghezza della sezione firma a 30% e uso space-around */
+            .digital-signature-block { 
+                flex-direction: row; 
+                justify-content: space-around; /* Affianca e distribuisce lo spazio */
+            }
+            .signature-section { width: 30%; } /* NUOVA LARGHEZZA ULTERIORMENTE RIDOTTA */
 
             /* Layout Orizzontale Campi Info */
             .info-field:nth-child(1) {
@@ -267,7 +271,7 @@
             img[id$="SignatureImg"] {
                 display: block !important;
                 height: 20px !important; /* NUOVO VALORE: 20px */
-                width: 50% !important;   /* NUOVO VALORE: 50% */
+                width: 50% !important;    /* NUOVO VALORE: 50% */
                 border: 1px solid #000 !important;
                 -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact;
@@ -470,7 +474,7 @@
                 const { x, y } = getCoords(e);
                 ctx.beginPath();
                 ctx.moveTo(x, y);
-            });
+            }, { passive: false });
         });
 
         ['mousemove', 'touchmove'].forEach(eventName => {
@@ -480,7 +484,7 @@
                 const { x, y } = getCoords(e);
                 ctx.lineTo(x, y);
                 ctx.stroke();
-            });
+            }, { passive: false });
         });
 
         ['mouseup', 'mouseout', 'touchend'].forEach(eventName => {
